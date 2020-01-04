@@ -1,0 +1,16 @@
+#input-text {
+    padding: 10px;
+}
+
+input, button {
+    border-radius: 5px;
+    padding: 5px;
+    font-size: medium;
+    border: 1px solid;
+}
+
+button {
+    margin-left: 15px;
+    color: white;
+    background: green;
+}
