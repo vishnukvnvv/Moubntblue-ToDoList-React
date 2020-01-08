@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import Todoheader from './components/toDoHeader';
 import ToDoInput from './components/toDoInput';
 import ToDoContainer from './components/toDoContainer';
 
@@ -9,10 +8,29 @@ class App extends Component {
     itemsArray: JSON.parse(localStorage.getItem('items')),
     dragStartPosition: 0,
     dragEndPosition: 0,
+    title: '',
+  }
+
+  addToTitle = (event) => {
+    this.setState({
+      title: event.target.value,
+    })
+  }
+
+  onEnter = (event) => {
+    if (event.which === 13) {
+      this.onSubmit();
+    }
+  }
+
+  onSubmit = () => {
+    this.addItem();
+    this.setState({
+      title: '',
+    });
   }
 
   updateLocalStorage() {
-    console.log(this.state.itemsArray)
     localStorage.setItem('items', JSON.stringify(this.state.itemsArray))
   }
 
@@ -24,26 +42,24 @@ class App extends Component {
         }
         return todo;
       })
-    });
-    this.updateLocalStorage();
+    }, this.updateLocalStorage());
+
   }
 
   deleteItem = (position) => {
-    console.log(position);
     this.state.itemsArray.splice(position, 1)
     this.setState({
       itemsArray: this.state.itemsArray,
-    });
-    this.updateLocalStorage();
+    }, this.updateLocalStorage());
   }
 
-  addItem = (title) => {
+  addItem = () => {
+    const title = this.state.title;
     if (title) {
       this.state.itemsArray.push({ text: title, status: false });
       this.setState({
         itemsArray: this.state.itemsArray,
-      });
-      this.updateLocalStorage();
+      }, this.updateLocalStorage());
     }
   }
 
@@ -58,20 +74,17 @@ class App extends Component {
 
   dragEnd = () => {
     const item = this.state.itemsArray.splice(this.state.dragStartPosition, 1);
-    console.log(item);
     this.state.itemsArray.splice(this.state.dragEndPosition, 0, item[0]);
-    console.log(this.state.itemsArray)
     this.setState({
       itemsArray: this.state.itemsArray,
-    });
-    this.updateLocalStorage();
+    }, this.updateLocalStorage());
   }
 
   render() {
     return (
       <div className="App">
-        <Todoheader />
-        <ToDoInput addItem={this.addItem} />
+        <header><b>To Do List</b></header>
+        <ToDoInput addToTitle = {this.addToTitle} title = {this.state.title} onEnter = {this.onEnter} onSubmit = {this.onSubmit}/>
         <div id="container">
           <ToDoContainer itemsArray={this.state.itemsArray} toggleStatus={this.toggleStatus} deleteItem={this.deleteItem} dragStart={this.dragStart} dragOver={this.dragOver} dragEnd={this.dragEnd} />
         </div>

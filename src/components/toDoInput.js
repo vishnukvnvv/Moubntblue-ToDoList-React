@@ -2,33 +2,10 @@ import React, { Component } from 'react';
 import './toDoInput.css';
 
 class ToDoInput extends Component {
-    state = {
-        title: '',
-    }
-
-    addToTitle = (event) => {
-        this.setState({
-            title: event.target.value,
-        })
-    }
-
-    onSubmit = () => {
-        this.props.addItem(this.state.title);
-        this.setState({
-            title: '',
-        });
-    }
-
-    onEnter = (event) => {
-        if(event.which === 13){
-            this.onSubmit();
-        }
-    }
-
     render() {
         return (<div id='input-text'>
-            <input type='text' placeholder='Enter data here' value={this.state.title} onKeyPress = {this.onEnter} onChange={this.addToTitle} />
-            <button type='submit' onClick={this.onSubmit}>Submit</button>
+            <input type='text' placeholder='Enter data here' value = {this.props.title} onChange = {this.props.addToTitle} onKeyPress = {this.props.onEnter}/>
+            <button type='submit' onClick = {this.props.onSubmit}>Submit</button>
         </div>);
     }
 }
